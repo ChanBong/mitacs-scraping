@@ -4,7 +4,7 @@ import time
 import pandas as pd
 
 PROJECT_PAGE = 'https://globalink.mitacs.ca/#/student/application/projects'
-TOTAL_PAGES = 1
+TOTAL_PAGES = 297
 
 driver = webdriver.Chrome()
 driver.get('https://globalink.mitacs.ca/#/student/application/projects')
@@ -47,7 +47,7 @@ def SinglePageScrape():
     driver.execute_script("arguments[0].click();", elements)
 
 date = time.strftime("%Y%m%d")
-excel_file = f'results/mitcas_projects24_till{date}.xlsx'
+excel_file = f'results/mitcas_projects24_till_{date}.xlsx'
 
 df = pd.DataFrame(columns=['Project ID', 'Name', 'Description', 'Faculty supervisor', 'Host Province', 'Host Institution', 'Host Campus', 'Location', 'Language', 'Preferred start date'])
 
