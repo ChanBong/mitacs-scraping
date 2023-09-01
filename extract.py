@@ -4,7 +4,7 @@ import time
 import pandas as pd
 
 PROJECT_PAGE = 'https://globalink.mitacs.ca/#/student/application/projects'
-TOTAL_PAGES = 297
+TOTAL_PAGES = 296
 
 driver = webdriver.Chrome()
 driver.get('https://globalink.mitacs.ca/#/student/application/projects')
@@ -12,7 +12,7 @@ print("Page loaded...")
 
 time.sleep(5) # Wait for the page to load completely
 
-def SinglePageScrape():
+def SinglePageScrape(counter):
     elements = driver.find_elements(By.XPATH, "//div[contains(@class, 'col-12') and contains(@class, 'col-md-12') and contains(@class, 'ng-star-inserted')]")
 
     for element in elements:
@@ -43,8 +43,11 @@ def SinglePageScrape():
             pass
 
     # Turn page
-    elements = driver.find_element(By.XPATH, '//button[@class="p-ripple p-element p-paginator-next p-paginator-element p-link"][1]')
-    driver.execute_script("arguments[0].click();", elements)
+    try:   
+        elements = driver.find_element(By.XPATH, '//button[@class="p-ripple p-element p-paginator-next p-paginator-element p-link"][1]')
+        driver.execute_script("arguments[0].click();", elements)
+    except:
+        print("Couldn't turn page")
 
 date = time.strftime("%Y%m%d")
 excel_file = f'results/mitcas_projects24_till_{date}.xlsx'
@@ -54,6 +57,6 @@ df = pd.DataFrame(columns=['Project ID', 'Name', 'Description', 'Faculty supervi
 for page in range(TOTAL_PAGES):
     print(f"On page {page + 1} of {TOTAL_PAGES}")
     time.sleep(3) # Wait for the page to load completely
-    SinglePageScrape()
+    SinglePageScrape(page)
 
 df.to_excel(excel_file, index=False)
